@@ -9,6 +9,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "eslint.run": "onSave",
-  "window.zoomLevel": 1
+  "eslint.run": "onSave"
 }
