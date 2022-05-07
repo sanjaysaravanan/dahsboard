@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material';
 import React from 'react';
 
-const Charts = () => {
+function Charts() {
   return (
-    <Typography variant='h3' >Charts</Typography>
-  )
+    <Typography variant="h3">Charts</Typography>
+  );
 }
 
 export default Charts;
