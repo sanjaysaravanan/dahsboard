@@ -3,11 +3,12 @@
     "javascript",
     "javascriptreact",
     "typescript",
-    "typescriptreact"
+    "typescriptreact",
   ],
   "editor.formatOnSave": true,
+  "editor.formatOnType": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "eslint.run": "onSave"
+  "eslint.alwaysShowStatus": true
 }

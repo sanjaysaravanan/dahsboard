@@ -12,7 +12,7 @@ export const mainListItems = (
     <ListItem
       button
       component={Link}
-      to="/dashboards"
+      to='/dashboards'
     >
       <ListItemIcon>
         <DashboardIcon />
