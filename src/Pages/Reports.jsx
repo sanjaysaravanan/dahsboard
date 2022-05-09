@@ -142,7 +142,7 @@ export default function Album() {
               id="combo-box-demo"
               options={types}
               fullWidth
-              renderInput={(params) => <TextField {...params} label="Movie" size="small" />}
+              renderInput={(params) => <TextField {...params} label="Report Type" size="small" />}
             />
           </Stack>
         </DialogContent>
