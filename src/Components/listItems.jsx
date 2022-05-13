@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import * as React from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -8,11 +9,11 @@ import TopicOutlinedIcon from '@mui/icons-material/TopicOutlined';
 import { Link } from 'react-router-dom';
 
 export const mainListItems = (
-  <React.Fragment>
+  <>
     <ListItem
       button
       component={Link}
-      to='/dashboards'
+      to="/dashboards"
     >
       <ListItemIcon>
         <DashboardIcon />
@@ -39,5 +40,5 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Reports" />
     </ListItem>
-  </React.Fragment>
+  </>
 );
