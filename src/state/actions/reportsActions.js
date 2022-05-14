@@ -29,12 +29,14 @@ export function createReport(payload) {
   return async function (dispatch) {
     try {
       dispatch(displayGlobalLoading());
-      const result = await reportsData( payload, {
+      console.log('Line 32')
+      const result = await postReport(payload, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      dispatch(throwNotificationDisplay(result?.message, "success"));
+      console.log(result);
+      // dispatch(throwNotificationDisplay(result?.message, "success"));
     } catch (error) {
       dispatch(
         throwNotificationDisplay("Something went wrong", "error")

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import * as React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -18,9 +18,7 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadReports } from '../state/actions';
-
-// const cards = [];
+import { loadReports, createReport } from '../state/actions';
 
 const types = [
   { label: 'Education', id: 1 },
@@ -29,10 +27,18 @@ const types = [
   { label: 'Stock', id: 4 },
 ];
 
+const initialState = {
+  file: null,
+  type: '',
+  name: '',
+  desc: '',
+};
+
 export default function Reports() {
   const dispatch = useDispatch();
   const reportsData = useSelector(({ reports }) => reports.reports);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [state, setState] = useState(initialState);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -42,9 +48,17 @@ export default function Reports() {
     setOpen(false);
   };
 
+  const handleSubmit = () => {
+    const payloadFormData = new FormData();
+    payloadFormData.append('file', state.file);
+    payloadFormData.append('name', state.name);
+    payloadFormData.append('desc', state.desc);
+    payloadFormData.append('type', state.type);
+    dispatch(createReport(payloadFormData));
+  };
+
   React.useEffect(() => {
     dispatch(loadReports());
-    // eslint-disable exhaustive-deps
   }, []);
 
   return (
@@ -72,7 +86,7 @@ export default function Reports() {
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small">View</Button>
+                <Button size="small">Edit</Button>
                 <Button size="small">Delete</Button>
               </CardActions>
             </Card>
@@ -100,7 +114,7 @@ export default function Reports() {
                 Add New Report
               </Typography>
               <Typography>
-                New Report, which can be used to generate Dashboard with Graphs
+                New Report, which can be used to generate Dashboard with Charts
               </Typography>
             </CardContent>
           </Card>
@@ -108,9 +122,10 @@ export default function Reports() {
       </Grid>
       <Dialog
         open={open}
-        onClose={handleClose}
+        // onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        dis
       >
         <DialogTitle id="alert-dialog-title">
           New Report
@@ -118,7 +133,7 @@ export default function Reports() {
         <DialogContent>
           <Stack spacing={2}>
             <DialogContentText id="alert-dialog-description">
-              New Report which can be used to generate graphs & dashboard
+              New Report which can be used to generate charts & dashboard
             </DialogContentText>
             <TextField
               type="text"
@@ -126,6 +141,10 @@ export default function Reports() {
               size="small"
               label="Report Name"
               fullWidth
+              onChange={(e) => setState({
+                ...state,
+                name: e.target.value,
+              })}
             />
             <div>
               <InputLabel>
@@ -136,6 +155,10 @@ export default function Reports() {
                 name="report-file"
                 size="small"
                 fullWidth
+                onChange={(e) => setState({
+                  ...state,
+                  file: e.target.files[0],
+                })}
               />
             </div>
             <TextField
@@ -146,6 +169,10 @@ export default function Reports() {
               multiline
               rows={2}
               fullWidth
+              onChange={(e) => setState({
+                ...state,
+                desc: e.target.value,
+              })}
             />
             <Autocomplete
               disablePortal
@@ -153,6 +180,10 @@ export default function Reports() {
               options={types}
               fullWidth
               renderInput={(params) => <TextField {...params} label="Report Type" size="small" />}
+              onChange={(_, value) => setState({
+                ...state,
+                type: value.label,
+              })}
             />
           </Stack>
         </DialogContent>
@@ -164,7 +195,7 @@ export default function Reports() {
             Cancel
           </Button>
           <Button
-            onClick={handleClose}
+            onClick={handleSubmit}
             variant="outlined"
           >
             Done
