@@ -22,3 +22,4 @@ export const USER_ADD_SUCCESS = "USER_ADD_SUCCESS";
 export const LOAD_REPORTS = "LOAD_REPORTS";
 export const ADD_REPORT = "ADD_REPORT";
 export const DELETE_REPORT = "DELETE_REPORT";
+export const SET_REPORT_LOADING = "SET_REPORT_LOADING";

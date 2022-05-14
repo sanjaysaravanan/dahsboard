@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { LOAD_REPORTS, ADD_REPORT, DELETE_REPORT } from "../actions/actionTypes";
+import { LOAD_REPORTS, ADD_REPORT, DELETE_REPORT, SET_REPORT_LOADING } from "../actions/actionTypes";
 
 export default function (state = {
   reports: [],
@@ -12,17 +12,7 @@ export default function (state = {
         reports: action.payload,
         isLoading: false
       }
-    case ADD_REPORT:
-      return {
-        ...state,
-        isLoading: true,
-      };
-    case DELETE_REPORT:
-      return {
-        ...state,
-        isLoading: true,
-      };
-    case SET_LOADING:
+    case SET_REPORT_LOADING:
       return {
         ...state,
         isLoading: action.payload,

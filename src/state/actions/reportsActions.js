@@ -1,26 +1,43 @@
 /* eslint-disable */
-import { ADD_REPORT } from "./actionTypes";
+import { ADD_REPORT, LOAD_REPORTS } from "./actionTypes";
 import {
   throwNotificationDisplay,
   displayGlobalLoading,
   hideGlobalLoading
 } from "./notifyActions";
-import { users } from "../../api";
+import { getReports, postReport } from "../../api/api";
 
-export function createReport(user) {
+export function loadReports() {
   return async function (dispatch) {
     try {
       dispatch(displayGlobalLoading());
-      const result = await users.createUser(user);
+      const reports = await getReports();
+      console.log(reports);
       dispatch({
-        type: ADD_REPORT,
-        payload: null
+        type: LOAD_REPORTS,
+        payload: reports,
       });
-      dispatch(throwNotificationDisplay(result?.message, "success", user));
     } catch (error) {
-      dispatch({ type: USER_ERROR });
+      console.log(error);
+    } finally {
+      dispatch(hideGlobalLoading());
+    }
+  }
+}
+
+export function createReport(payload) {
+  return async function (dispatch) {
+    try {
+      dispatch(displayGlobalLoading());
+      const result = await reportsData( payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      dispatch(throwNotificationDisplay(result?.message, "success"));
+    } catch (error) {
       dispatch(
-        throwNotificationDisplay(error?.response.data.errorMsg, "error", user)
+        throwNotificationDisplay("Something went wrong", "error")
       );
     } finally {
       dispatch(hideGlobalLoading());

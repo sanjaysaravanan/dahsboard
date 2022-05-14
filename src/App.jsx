@@ -3,6 +3,8 @@ import { ThemeProvider, StyledEngineProvider, createTheme } from '@mui/material/
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { CssBaseline } from '@mui/material';
+import LoadingIndicator from './Components/Loader/Loader';
+import SnackBarMessage from './Components/SnackBarMessage/SnackBarMessage';
 import Store from './state/store';
 import Layout from './Pages/Layout';
 import Home from './Pages/Home';
@@ -26,6 +28,8 @@ function App() {
                 <Route path="Charts" element={<Charts />} />
               </Route>
             </Routes>
+            <SnackBarMessage />
+            <LoadingIndicator />
           </Router>
         </ThemeProvider>
       </StyledEngineProvider>

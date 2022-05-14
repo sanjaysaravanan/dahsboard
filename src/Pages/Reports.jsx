@@ -16,8 +16,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import {
   Autocomplete, InputLabel, Stack, TextField,
 } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 
-const cards = [];
+import { loadReports } from '../state/actions';
+
+// const cards = [];
 
 const types = [
   { label: 'Education', id: 1 },
@@ -26,7 +29,9 @@ const types = [
   { label: 'Stock', id: 4 },
 ];
 
-export default function Album() {
+export default function Reports() {
+  const dispatch = useDispatch();
+  const reportsData = useSelector(({ reports }) => reports.reports);
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -36,11 +41,17 @@ export default function Album() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  React.useEffect(() => {
+    dispatch(loadReports());
+    // eslint-disable exhaustive-deps
+  }, []);
+
   return (
     <>
       <Grid container spacing={4}>
-        {cards.map((card) => (
-          <Grid item key={card} xs={12} sm={6} md={4}>
+        {reportsData.map(({ name, desc }) => (
+          <Grid item key={name} xs={12} sm={6} md={4}>
             <Card
               sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
             >
@@ -54,11 +65,10 @@ export default function Album() {
               />
               <CardContent sx={{ flexGrow: 1 }}>
                 <Typography gutterBottom variant="h5" component="h2">
-                  Heading
+                  {name}
                 </Typography>
                 <Typography>
-                  This is a media card. You can use this section to describe the
-                  content.
+                  {desc}
                 </Typography>
               </CardContent>
               <CardActions>
