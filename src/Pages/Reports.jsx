@@ -125,7 +125,6 @@ export default function Reports() {
         // onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        dis
       >
         <DialogTitle id="alert-dialog-title">
           New Report
