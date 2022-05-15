@@ -1,13 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import AddIcon from '@mui/icons-material/Add';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -18,7 +12,8 @@ import {
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loadReports, createReport } from '../state/actions';
+import { loadReports, createReport, removeReport } from '../state/actions';
+import CustomCard from '../Components/CustomCard';
 
 const types = [
   { label: 'Education', id: 1 },
@@ -55,6 +50,11 @@ export default function Reports() {
     payloadFormData.append('desc', state.desc);
     payloadFormData.append('type', state.type);
     dispatch(createReport(payloadFormData));
+    handleClose();
+  };
+
+  const handleDelete = (id) => {
+    dispatch(removeReport(id));
   };
 
   React.useEffect(() => {
@@ -64,60 +64,18 @@ export default function Reports() {
   return (
     <>
       <Grid container spacing={4}>
-        {reportsData.map(({ name, desc }) => (
+        {reportsData.map(({ id, name, desc }) => (
           <Grid item key={name} xs={12} sm={6} md={4}>
-            <Card
-              sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-            >
-              <CardMedia
-                component="img"
-                sx={{
-                  maxHeight: '200px',
-                }}
-                image="https://source.unsplash.com/random"
-                alt="random"
-              />
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {name}
-                </Typography>
-                <Typography>
-                  {desc}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Edit</Button>
-                <Button size="small">Delete</Button>
-              </CardActions>
-            </Card>
+            <CustomCard
+              type="report"
+              cardName={name}
+              cardDesc={desc}
+              handleDelete={() => handleDelete(id)}
+            />
           </Grid>
         ))}
         <Grid item key="add-card" xs={12} sm={6} md={4}>
-          <Card
-            sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-          >
-            <CardMedia
-              component="button"
-              sx={{
-                height: 200,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                cursor: 'pointer',
-              }}
-              onClick={handleClickOpen}
-            >
-              <AddIcon sx={{ fontSize: '128px' }} />
-            </CardMedia>
-            <CardContent sx={{ flexGrow: 1 }}>
-              <Typography gutterBottom variant="h5" component="h2">
-                Add New Report
-              </Typography>
-              <Typography>
-                New Report, which can be used to generate Dashboard with Charts
-              </Typography>
-            </CardContent>
-          </Card>
+          <CustomCard action="add" type="report" handleClickOpen={handleClickOpen} />
         </Grid>
       </Grid>
       <Dialog

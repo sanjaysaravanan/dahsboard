@@ -17,6 +17,12 @@ export default function (state = {
         ...state,
         isLoading: action.payload,
       }
+    case DELETE_REPORT:
+      return {
+        ...state,
+        reports: state.reports.filter(({ id }) => id !== action.payload),
+        isLoading: false,
+      }
     default:
       return state;
   }
