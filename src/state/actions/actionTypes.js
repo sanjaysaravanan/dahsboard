@@ -23,3 +23,8 @@ export const LOAD_REPORTS = "LOAD_REPORTS";
 export const ADD_REPORT = "ADD_REPORT";
 export const DELETE_REPORT = "DELETE_REPORT";
 export const SET_REPORT_LOADING = "SET_REPORT_LOADING";
+
+// Charts
+export const LOAD_CHARTS = "LOAD_REPORTS";
+export const SET_CHARTS_LOADING = "SET_CHARTS_LOADING";
+export const DELETE_CHART = "DELETE_CHART";

@@ -27,8 +27,10 @@ export default function Reports() {
     setOpen(false);
   };
 
-  const handleSubmit = () => {
-    handleClose();
+  const handleSubmit = (payload) => {
+    console.log(payload);
+
+    // handleClose();
   };
 
   const handleDelete = (id) => {
@@ -78,7 +80,6 @@ export default function Reports() {
       </Grid>
       <Dialog
         open={open}
-        // onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
         maxWidth="xl"

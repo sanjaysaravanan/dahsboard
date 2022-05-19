@@ -88,7 +88,7 @@ function LineAdd({ dataOptions, handleAddLine }) {
         renderInput={(params) => (
           <TextField
             {...params}
-            label="Group data as"
+            label="Group as"
             size="small"
           />
         )}
@@ -133,7 +133,20 @@ function LineDetail({
       spacing={2}
     >
       <TextField label="Data" value={dataField} size="small" disabled />
-      <TextField label="Color" value={color} size="small" disabled />
+      <TextField
+        label="Color"
+        value={color}
+        size="small"
+        sx={{ width: 200 }}
+        InputProps={{
+          endAdornment: <Box
+            bgcolor={color}
+            height={theme.spacing(3)}
+            width={theme.spacing(5)}
+          />,
+        }}
+        disabled
+      />
       <TextField label="Group as" value={accumulator} size="small" disabled />
       <Fab
         color="primary"
@@ -155,16 +168,14 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
   const [chartType, setChartType] = useState(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [xAxis, setXAxis] = useState('');
   const [dataOptions, setDataOptions] = useState([]);
+  const [axisOptions, setAxisOptions] = useState([]);
   const [lines, setLines] = useState([]);
 
   const reportsData = useSelector(({ reports }) => reports.reports);
 
   const handleNext = () => {
-    console.log({
-      type: chartType,
-      reportId: chartReport.id,
-    });
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
@@ -175,7 +186,7 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
   const handleAddLine = (obj) => {
     const lineData = {
       ...obj,
-      id: lines.length + 1,
+      id: (lines.length + 1).toString(),
     };
     const newLines = [...lines, lineData];
     setLines(newLines);
@@ -185,13 +196,13 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
     setLines(lines.filter(({ id }) => id !== lineId));
   };
 
-  useEffect(() => {
-    console.log(reportsData);
-    return () => {
+  useEffect(
+    () => () => {
       setReport(null);
       setChartType(null);
-    };
-  }, []);
+    },
+    [],
+  );
 
   return (
     <Box sx={{ width: '100%', minWidth: '1000px' }}>
@@ -218,6 +229,7 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
               setReport(reportObj);
               const options = reportObj.dataFields.map((ele) => ({ label: ele, id: ele }));
               setDataOptions(options);
+              setAxisOptions(reportObj.fields.map((ele) => ({ label: ele, id: ele })));
             }}
             getOptionLabel={(option) => option.name}
           />
@@ -233,41 +245,60 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
           />
         )}
         {activeStep === 2 && (
-          <Stack spacing={2}>
-            <TextField
-              type="text"
-              name="chart-name"
-              size="small"
-              label="Chart Name"
-              fullWidth
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-            />
-            <TextField
-              type="text"
-              name="chart-desc"
-              size="small"
-              label="Chart Description"
-              multiline
-              rows={2}
-              fullWidth
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <div>
-              <InputLabel>
-                Lines for the Chart
-              </InputLabel>
-              {lines.map((lineObj) => (
-                <LineDetail
-                  {...lineObj}
-                  handleDelete={handleDeleteLine}
+          <>
+            {chartType === 'line' && (
+              <Stack spacing={2}>
+                <TextField
+                  type="text"
+                  name="chart-name"
+                  size="small"
+                  label="Chart Name"
+                  fullWidth
+                  value={name}
+                  onChange={(event) => setName(event.target.value)}
                 />
-              ))}
-              <Typography variant="h6" marginY={1}>Add New Line</Typography>
-              <LineAdd dataOptions={dataOptions} handleAddLine={handleAddLine} />
-            </div>
-          </Stack>
+                <TextField
+                  type="text"
+                  name="chart-desc"
+                  size="small"
+                  label="Chart Description"
+                  multiline
+                  rows={2}
+                  fullWidth
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+                <Autocomplete
+                  disablePortal
+                  id="x-axis"
+                  options={axisOptions}
+                  fullWidth
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Choose Horizontal Axis"
+                      size="small"
+                    />
+                  )}
+                  onChange={(_, axisObj) => setXAxis(axisObj.id)}
+                />
+                <div>
+                  <InputLabel>
+                    Lines for the Chart
+                  </InputLabel>
+                  {lines.map((lineObj) => (
+                    <LineDetail
+                      {...lineObj}
+                      handleDelete={handleDeleteLine}
+                    />
+                  ))}
+                  <Typography variant="h6" marginY={1}>Add New Line</Typography>
+                  <LineAdd dataOptions={dataOptions} handleAddLine={handleAddLine} />
+                </div>
+              </Stack>
+            )}
+            <Box />
+          </>
         )}
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
@@ -286,7 +317,20 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
           Cancel
         </Button>
         {activeStep === steps.length - 1
-          ? <Button onClick={handleSubmit}>Generate Chart</Button>
+          ? (
+            <Button
+              onClick={() => handleSubmit({
+                name,
+                reportId: chartReport.id,
+                description,
+                type: chartType,
+                xaxis: xAxis,
+                lines,
+              })}
+            >
+              Generate Chart
+            </Button>
+          )
           : <Button onClick={handleNext}>Next</Button>}
       </Box>
     </Box>
