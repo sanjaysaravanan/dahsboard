@@ -14,12 +14,18 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { loadReports, createReport, removeReport } from '../state/actions';
 import CustomCard from '../Components/CustomCard';
+import BusinessImg from '../assets/images/Business.png';
+import EducationImg from '../assets/images/Education.png';
+import ExpenseImg from '../assets/images/Expense.png';
+import SalesImg from '../assets/images/Sales.png';
+import OthersImg from '../assets/images/Others.png';
 
 const types = [
   { label: 'Education', id: 1 },
   { label: 'Expense', id: 2 },
   { label: 'Sales', id: 3 },
-  { label: 'Stock', id: 4 },
+  { label: 'Business', id: 5 },
+  { label: 'Others', id: 6 },
 ];
 
 const initialState = {
@@ -57,6 +63,23 @@ export default function Reports() {
     dispatch(removeReport(id));
   };
 
+  const renderImg = (type) => {
+    switch (type) {
+      case 'Education':
+        return EducationImg;
+      case 'Expense':
+        return ExpenseImg;
+      case 'Sales':
+        return SalesImg;
+      case 'Business':
+        return BusinessImg;
+      case 'Others':
+        return OthersImg;
+      default:
+        return OthersImg;
+    }
+  };
+
   React.useEffect(() => {
     dispatch(loadReports());
   }, []);
@@ -64,13 +87,16 @@ export default function Reports() {
   return (
     <>
       <Grid container spacing={4}>
-        {reportsData.map(({ id, name, desc }) => (
+        {reportsData.map(({
+          id, name, desc, type,
+        }) => (
           <Grid item key={name} xs={12} sm={6} md={4}>
             <CustomCard
               type="report"
               cardName={name}
               cardDesc={desc}
               handleDelete={() => handleDelete(id)}
+              imgSrc={renderImg(type)}
             />
           </Grid>
         ))}
@@ -133,7 +159,7 @@ export default function Reports() {
             />
             <Autocomplete
               disablePortal
-              id="combo-box-demo"
+              id="report-type"
               options={types}
               fullWidth
               renderInput={(params) => <TextField {...params} label="Report Type" size="small" />}

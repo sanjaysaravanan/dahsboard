@@ -14,6 +14,7 @@ export default function CustomCard({
   action = 'display',
   handleClickOpen,
   handleDelete,
+  imgSrc,
 }) {
   if (action === 'add') {
     return (
@@ -62,7 +63,7 @@ export default function CustomCard({
         sx={{
           maxHeight: '200px',
         }}
-        image="https://source.unsplash.com/random"
+        image={imgSrc}
         alt="random"
       />
       <CardContent sx={{ flexGrow: 1 }}>
