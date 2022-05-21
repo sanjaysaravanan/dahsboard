@@ -14,11 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { loadReports, createReport, removeReport } from '../state/actions';
 import CustomCard from '../Components/CustomCard';
-import BusinessImg from '../assets/images/Business.png';
-import EducationImg from '../assets/images/Education.png';
-import ExpenseImg from '../assets/images/Expense.png';
-import SalesImg from '../assets/images/Sales.png';
-import OthersImg from '../assets/images/Others.png';
 
 const types = [
   { label: 'Education', id: 1 },
@@ -63,26 +58,11 @@ export default function Reports() {
     dispatch(removeReport(id));
   };
 
-  const renderImg = (type) => {
-    switch (type) {
-      case 'Education':
-        return EducationImg;
-      case 'Expense':
-        return ExpenseImg;
-      case 'Sales':
-        return SalesImg;
-      case 'Business':
-        return BusinessImg;
-      case 'Others':
-        return OthersImg;
-      default:
-        return OthersImg;
-    }
-  };
-
   React.useEffect(() => {
     dispatch(loadReports());
   }, []);
+
+  console.log(reportsData);
 
   return (
     <>
@@ -96,7 +76,7 @@ export default function Reports() {
               cardName={name}
               cardDesc={desc}
               handleDelete={() => handleDelete(id)}
-              imgSrc={renderImg(type)}
+              imgType={type}
             />
           </Grid>
         ))}

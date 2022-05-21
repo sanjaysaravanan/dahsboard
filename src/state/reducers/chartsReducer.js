@@ -1,9 +1,10 @@
 /* eslint-disable */
-import { DELETE_CHART, LOAD_CHARTS, SET_CHARTS_LOADING } from "../actions/actionTypes";
+import { DELETE_CHART, LOAD_CHARTS, SET_CHARTS_LOADING, SET_SELECTED_CHART } from "../actions/actionTypes";
 
 export default function (state = {
   charts: [],
   isLoading: false,
+  selectedChart: null,
 }, action) {
   switch (action.type) {
     case LOAD_CHARTS:
@@ -17,6 +18,12 @@ export default function (state = {
         ...state,
         isLoading: action.payload,
       };
+    case SET_SELECTED_CHART:
+      return {
+        ...state,
+        selectedChart: action.payload,
+        isLoading: false,
+      }
     case DELETE_CHART:
       return {
         ...state,

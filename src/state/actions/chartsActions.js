@@ -1,11 +1,13 @@
 /* eslint-disable */
-import { DELETE_CHART, LOAD_CHARTS } from "./actionTypes";
+import { DELETE_CHART, LOAD_CHARTS, SET_CHARTS_LOADING, SET_SELECTED_CHART } from "./actionTypes";
 import {
   throwNotificationDisplay,
   displayGlobalLoading,
   hideGlobalLoading
 } from "./notifyActions";
-import { getCharts, postChart, deleteChart } from "../../api/api";
+import { getCharts, postLineChart, postPieChart, 
+  postBarChart, deleteChart, getLineChartData } from "../../api/api";
+
 
 export function loadCharts() {
   return async function (dispatch) {
@@ -24,15 +26,29 @@ export function loadCharts() {
   }
 }
 
-export function createChart(payload) {
+export function createChart(payload, chartType) {
   return async function (dispatch) {
     try {
       dispatch(displayGlobalLoading());
-      const { charts } = await postChart(payload, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
+
+      let response = null;
+
+      switch(chartType){
+        case 'line':
+          response = await postLineChart(payload);
+          break;
+        case 'pie':
+          response = await postPieChart(payload);
+          break;
+        case 'bar':
+          response = await postBarChart(payload);
+          break;
+        default:
+          break;
+      }
+
+      const { charts } = response;
+
       dispatch({
         type: LOAD_CHARTS,
         payload: charts,
@@ -61,6 +77,31 @@ export function removeChart(chartId) {
       console.log(error);
     } finally {
       dispatch(hideGlobalLoading());
+    }
+  }
+}
+
+export function loadChart(chartData) {
+  return async function (dispatch) {
+    try {
+      dispatch(displayGlobalLoading());
+      dispatch({
+        type: SET_CHARTS_LOADING,
+        payload: true,
+      });
+      const response = await getLineChartData(chartData);
+      dispatch({
+        type: SET_SELECTED_CHART,
+        payload: response,
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(hideGlobalLoading());
+      dispatch({
+        type: SET_CHARTS_LOADING,
+        payload: false,
+      });
     }
   }
 }

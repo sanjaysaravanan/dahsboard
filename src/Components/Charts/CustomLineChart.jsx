@@ -85,8 +85,8 @@ export default function CustomLineChart() {
           data={data}
           margin={{
             top: 5,
-            right: 30,
-            left: 20,
+            right: 10,
+            left: 0,
             bottom: 5,
           }}
         >
@@ -99,7 +99,6 @@ export default function CustomLineChart() {
           <Line type="monotone" dataKey="uv" strokeOpacity={opacity.uv} stroke="#82ca9d" />
         </LineChart>
       </ResponsiveContainer>
-      <p className="notes">Tips: Hover the legend !</p>
     </div>
   );
 }

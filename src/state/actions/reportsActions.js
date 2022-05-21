@@ -12,7 +12,6 @@ export function loadReports() {
     try {
       dispatch(displayGlobalLoading());
       const reports = await getReports();
-      console.log(reports);
       dispatch({
         type: LOAD_REPORTS,
         payload: reports,
@@ -52,7 +51,6 @@ export function createReport(payload) {
 export function removeReport(reportId) {
   return async function (dispatch) {
     try {
-      console.log(reportId);
       dispatch(displayGlobalLoading());
       await deleteReport(reportId);
       dispatch({

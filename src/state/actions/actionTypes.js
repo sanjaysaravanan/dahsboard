@@ -25,6 +25,7 @@ export const DELETE_REPORT = "DELETE_REPORT";
 export const SET_REPORT_LOADING = "SET_REPORT_LOADING";
 
 // Charts
-export const LOAD_CHARTS = "LOAD_REPORTS";
+export const LOAD_CHARTS = "LOAD_CHARTS";
 export const SET_CHARTS_LOADING = "SET_CHARTS_LOADING";
 export const DELETE_CHART = "DELETE_CHART";
+export const SET_SELECTED_CHART = "SET_SELECTED_CHART";

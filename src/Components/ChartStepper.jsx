@@ -289,6 +289,7 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
                   {lines.map((lineObj) => (
                     <LineDetail
                       {...lineObj}
+                      key={lineObj.dataField}
                       handleDelete={handleDeleteLine}
                     />
                   ))}
@@ -319,14 +320,17 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
         {activeStep === steps.length - 1
           ? (
             <Button
-              onClick={() => handleSubmit({
-                name,
-                reportId: chartReport.id,
-                description,
-                type: chartType,
-                xaxis: xAxis,
-                lines,
-              })}
+              onClick={() => handleSubmit(
+                {
+                  name,
+                  reportId: chartReport.id,
+                  desc: description,
+                  type: chartType,
+                  xaxis: xAxis,
+                  lines,
+                },
+                chartType,
+              )}
             >
               Generate Chart
             </Button>

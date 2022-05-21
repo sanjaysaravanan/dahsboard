@@ -7,6 +7,14 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
 
+import BusinessImg from '../assets/images/business-card.svg';
+import EducationImg from '../assets/images/education.svg';
+import ExpenseImg from '../assets/images/expense.svg';
+import SalesImg from '../assets/images/sales.svg';
+import OthersImg from '../assets/images/Others.png';
+import LineChartImg from '../assets/images/line-chart.svg';
+import PieChartImg from '../assets/images/pie-chart.svg';
+
 export default function CustomCard({
   cardName,
   cardDesc,
@@ -14,8 +22,31 @@ export default function CustomCard({
   action = 'display',
   handleClickOpen,
   handleDelete,
-  imgSrc,
+  handleViewChart,
+  imgType,
+  cardData,
 }) {
+  const renderImg = () => {
+    switch (imgType) {
+      case 'Education':
+        return EducationImg;
+      case 'Expense':
+        return ExpenseImg;
+      case 'Sales':
+        return SalesImg;
+      case 'Business':
+        return BusinessImg;
+      case 'line':
+        return LineChartImg;
+      case 'pie':
+        return PieChartImg;
+      case 'Others':
+        return OthersImg;
+      default:
+        return OthersImg;
+    }
+  };
+
   if (action === 'add') {
     return (
       <Card
@@ -62,8 +93,9 @@ export default function CustomCard({
         component="img"
         sx={{
           maxHeight: '200px',
+          objectFit: 'none',
         }}
-        image={imgSrc}
+        image={renderImg()}
         alt="random"
       />
       <CardContent sx={{ flexGrow: 1 }}>
@@ -77,7 +109,16 @@ export default function CustomCard({
         )}
       </CardContent>
       <CardActions>
-        <Button size="small">Edit</Button>
+        {type === 'report'
+          ? <Button size="small">Edit</Button>
+          : (
+            <Button
+              size="small"
+              onClick={() => handleViewChart(cardData)}
+            >
+              View
+            </Button>
+          )}
         <Button size="small" onClick={handleDelete}>Delete</Button>
       </CardActions>
     </Card>
