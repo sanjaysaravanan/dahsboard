@@ -1,59 +1,17 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
 
-const data = [
-  {
-    name: 'Page A',
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: 'Page B',
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: 'Page C',
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: 'Page D',
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: 'Page E',
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: 'Page F',
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: 'Page G',
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+export default function CustomLineChart({ data = [], lines = [], xAxis }) {
+  const opacityState = {};
+  lines.forEach((lineObj) => {
+    opacityState[lineObj.dataField] = 1;
+  });
 
-export default function CustomLineChart() {
   const [state, setState] = useState({
-    opacity: {
-      uv: 1,
-      pv: 1,
-    },
+    opacity: opacityState,
   });
 
   const handleMouseEnter = (o) => {
@@ -61,7 +19,7 @@ export default function CustomLineChart() {
     const { opacity } = state;
 
     setState({
-      opacity: { ...opacity, [dataKey]: 0.5 },
+      opacity: { ...opacity, [dataKey]: 0.65 },
     });
   };
 
@@ -74,14 +32,12 @@ export default function CustomLineChart() {
     });
   };
 
-  const { opacity } = state;
-
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: '100%', height: '100%' }}>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart
           width={500}
-          height={300}
+          height="100%"
           data={data}
           margin={{
             top: 5,
@@ -91,12 +47,19 @@ export default function CustomLineChart() {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <XAxis dataKey={xAxis} />
           <YAxis />
           <Tooltip />
           <Legend onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
-          <Line type="monotone" dataKey="pv" strokeOpacity={opacity.pv} stroke="#8884d8" activeDot={{ r: 8 }} />
-          <Line type="monotone" dataKey="uv" strokeOpacity={opacity.uv} stroke="#82ca9d" />
+          {lines.map((lineObj) => (
+            <Line
+              type="monotone"
+              dataKey={lineObj.dataField}
+              strokeOpacity={state.opacity[lineObj.dataField]}
+              stroke={lineObj.color}
+              activeDot={{ r: 8 }}
+            />
+          ))}
         </LineChart>
       </ResponsiveContainer>
     </div>

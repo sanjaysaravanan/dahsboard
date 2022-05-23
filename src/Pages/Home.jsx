@@ -2,7 +2,7 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 
-function DashboardContent() {
+export default function Home() {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={8} lg={9}>
@@ -30,8 +30,4 @@ function DashboardContent() {
       </Grid>
     </Grid>
   );
-}
-
-export default function Dashboard() {
-  return <DashboardContent />;
 }

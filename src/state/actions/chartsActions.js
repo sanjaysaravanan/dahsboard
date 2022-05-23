@@ -5,8 +5,8 @@ import {
   displayGlobalLoading,
   hideGlobalLoading
 } from "./notifyActions";
-import { getCharts, postLineChart, postPieChart, 
-  postBarChart, deleteChart, getLineChartData } from "../../api/api";
+import { getCharts, postLineChart, postPieChart, postBarChart, deleteChart,
+  getLineChartData, getPieChartData, getBarChartData } from "../../api/api";
 
 
 export function loadCharts() {
@@ -47,13 +47,13 @@ export function createChart(payload, chartType) {
           break;
       }
 
-      const { charts } = response;
+      const { message, charts } = response;
 
       dispatch({
         type: LOAD_CHARTS,
         payload: charts,
       })
-      // dispatch(throwNotificationDisplay(message || "Report Created", "success"));
+      dispatch(throwNotificationDisplay(message || "Chart Created", "success"));
     } catch (error) {
       dispatch(
         throwNotificationDisplay("Something went wrong", "error")
@@ -75,11 +75,16 @@ export function removeChart(chartId) {
       });
     } catch (error) {
       console.log(error);
+      dispatch(
+        throwNotificationDisplay("Something went wrong", "error")
+      );
     } finally {
       dispatch(hideGlobalLoading());
     }
   }
 }
+
+export const emptyChart = () => ({type: SET_SELECTED_CHART, payload: null});
 
 export function loadChart(chartData) {
   return async function (dispatch) {
@@ -89,13 +94,30 @@ export function loadChart(chartData) {
         type: SET_CHARTS_LOADING,
         payload: true,
       });
-      const response = await getLineChartData(chartData);
+      let response = null;
+      switch(chartData.type){
+        case 'line':
+          response = await getLineChartData(chartData);
+          break;
+        case 'pie':
+          response = await getPieChartData(chartData);
+          break;
+        case 'bar':
+          response = await getBarChartData(payload);
+          break;
+        default:
+          break;
+      }
+
       dispatch({
         type: SET_SELECTED_CHART,
         payload: response,
       });
     } catch (error) {
       console.log(error);
+      dispatch(
+        throwNotificationDisplay("Something went wrong", "error")
+      );
     } finally {
       dispatch(hideGlobalLoading());
       dispatch({

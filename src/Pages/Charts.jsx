@@ -9,14 +9,14 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Box, ButtonBase, CircularProgress } from '@mui/material';
 
 import {
-  loadReports, createChart, loadCharts, loadChart,
+  loadReports, createChart, loadCharts, loadChart, emptyChart, removeChart,
 } from '../state/actions';
 import CustomCard from '../Components/CustomCard';
 import ChartStepper from '../Components/ChartStepper';
 import LineChart from '../Components/Charts/CustomLineChart';
-import { deleteChart } from '../api/api';
+import PieChart from '../Components/Charts/CustomPieChart';
 
-export default function Reports() {
+export default function Charts() {
   const dispatch = useDispatch();
 
   const chartsData = useSelector(({ charts }) => charts.charts);
@@ -39,7 +39,7 @@ export default function Reports() {
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteChart(id));
+    dispatch(removeChart(id));
   };
 
   const handleViewChart = (chartObj) => {
@@ -50,6 +50,7 @@ export default function Reports() {
 
   const handleCloseChart = () => {
     setChartOpen(false);
+    dispatch(emptyChart());
   };
 
   useEffect(() => {
@@ -57,11 +58,28 @@ export default function Reports() {
     dispatch(loadCharts());
   }, []);
 
-  // useEffect(() => {
-  //   if(chartData) {
-
-  //   }
-  // }, )
+  const renderChart = (type) => {
+    switch (type) {
+      case 'line':
+        return (
+          <LineChart
+            data={selectedChart.chartData}
+            lines={selectedChart.lines}
+            xAxis={selectedChart.xaxis}
+          />
+        );
+      case 'pie':
+        return (
+          <PieChart
+            data={selectedChart.chartData}
+            showBy={selectedChart.showBy}
+            dataField={selectedChart.dataField}
+          />
+        );
+      default:
+        return '';
+    }
+  };
 
   return (
     <>
@@ -124,10 +142,8 @@ export default function Reports() {
             {isLoading ? (
               <CircularProgress />
             ) : (
-              <Box width="100%">
-                {selectedChart && (
-                  <LineChart />
-                )}
+              <Box width="100%" minheight="300px">
+                {selectedChart && renderChart(selectedChart.type)}
               </Box>
             )}
           </Box>

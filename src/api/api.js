@@ -16,6 +16,10 @@ export const getLineChartData = (payload) => dashboardInstance.post('/charts/lin
 
 export const postPieChart = (payload) => dashboardInstance.post('/charts/pie', payload);
 
+export const getPieChartData = (payload) => dashboardInstance.post('/charts/pie/data', payload);
+
 export const postBarChart = (payload) => dashboardInstance.post('/charts/bar', payload);
+
+export const getBarChartData = (payload) => dashboardInstance.post('/charts/bar/data', payload);
 
 export const deleteChart = (chartId) => dashboardInstance.delete(`/charts/${chartId}`);

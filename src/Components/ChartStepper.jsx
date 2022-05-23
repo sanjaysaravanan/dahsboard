@@ -33,8 +33,6 @@ function LineAdd({ dataOptions, handleAddLine }) {
   const theme = useTheme();
   const [lineData, setLineData] = useState(null);
   const [color, setColor] = useState('#ff0000');
-  // eslint-disable-next-line no-unused-vars
-  const [accumulator, setAccumulator] = useState(accumulators[0]);
 
   return (
     <Stack
@@ -79,21 +77,6 @@ function LineAdd({ dataOptions, handleAddLine }) {
         }}
         onChange={(e) => setColor(e.target.value)}
       />
-      <Autocomplete
-        disablePortal
-        id="accumulator"
-        value={accumulator}
-        options={accumulators}
-        sx={{ width: 250 }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Group as"
-            size="small"
-          />
-        )}
-        onChange={(_, accuData) => setAccumulator(accuData)}
-      />
       <Fab
         color="primary"
         aria-label="add"
@@ -101,11 +84,9 @@ function LineAdd({ dataOptions, handleAddLine }) {
           handleAddLine({
             dataField: lineData.id,
             color,
-            accumulator: accumulator.label,
           });
           setLineData(null);
           setColor('#ff0000');
-          setAccumulator(accumulators[0]);
         }}
         size="small"
       >
@@ -116,7 +97,7 @@ function LineAdd({ dataOptions, handleAddLine }) {
 }
 
 function LineDetail({
-  id, dataField, color, accumulator, handleDelete,
+  id, dataField, color, handleDelete,
 }) {
   const theme = useTheme();
   return (
@@ -147,7 +128,6 @@ function LineDetail({
         }}
         disabled
       />
-      <TextField label="Group as" value={accumulator} size="small" disabled />
       <Fab
         color="primary"
         aria-label="add"
@@ -168,10 +148,12 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
   const [chartType, setChartType] = useState(null);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [xAxis, setXAxis] = useState('');
   const [dataOptions, setDataOptions] = useState([]);
   const [axisOptions, setAxisOptions] = useState([]);
+
+  const [xAxis, setXAxis] = useState('');
   const [lines, setLines] = useState([]);
+  const [accumulator, setAccumulator] = useState(accumulators[0]);
 
   const reportsData = useSelector(({ reports }) => reports.reports);
 
@@ -296,6 +278,21 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
                   <Typography variant="h6" marginY={1}>Add New Line</Typography>
                   <LineAdd dataOptions={dataOptions} handleAddLine={handleAddLine} />
                 </div>
+                <Autocomplete
+                  disablePortal
+                  id="accumulator"
+                  value={accumulator}
+                  options={accumulators}
+                  fullWidth
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Group as"
+                      size="small"
+                    />
+                  )}
+                  onChange={(_, accuData) => setAccumulator(accuData)}
+                />
               </Stack>
             )}
             <Box />
@@ -328,6 +325,7 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
                   type: chartType,
                   xaxis: xAxis,
                   lines,
+                  accumulator: accumulator.id,
                 },
                 chartType,
               )}

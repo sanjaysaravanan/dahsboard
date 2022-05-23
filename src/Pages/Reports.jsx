@@ -62,8 +62,6 @@ export default function Reports() {
     dispatch(loadReports());
   }, []);
 
-  console.log(reportsData);
-
   return (
     <>
       <Grid container spacing={4}>

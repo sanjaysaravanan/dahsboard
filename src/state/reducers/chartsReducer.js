@@ -27,7 +27,7 @@ export default function (state = {
     case DELETE_CHART:
       return {
         ...state,
-        isLoading: state.charts.filter(({ id }) => id !== action.payload),
+        charts: state.charts.filter(({ id }) => id !== action.payload),
       };
     default:
       return state;

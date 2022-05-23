@@ -13,7 +13,7 @@ import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { mainListItems } from '../Components/listItems';
+import ListItems from '../Components/listItems';
 
 const drawerWidth = 240;
 
@@ -54,7 +54,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         }),
         width: theme.spacing(7),
         [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
+          // width: theme.spacing(9),
         },
       }),
     },
@@ -116,7 +116,7 @@ function Layout() {
         </Toolbar>
         <Divider />
         <List component="nav">
-          {mainListItems}
+          <ListItems />
           <Divider sx={{ my: 1 }} />
         </List>
       </Drawer>
@@ -132,7 +132,7 @@ function Layout() {
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, height: '100%' }}>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
           <Outlet />
         </Container>
       </Box>
