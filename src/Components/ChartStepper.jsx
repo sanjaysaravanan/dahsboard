@@ -7,7 +7,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import { useSelector } from 'react-redux';
 import {
-  Autocomplete, InputLabel, Stack, TextField, Typography, useTheme, Fab,
+  Autocomplete, InputLabel, Stack, TextField, Typography, useTheme, Fab, FormControlLabel, Checkbox,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { DeleteOutline } from '@mui/icons-material';
@@ -66,7 +66,6 @@ function LineAdd({ dataOptions, handleAddLine }) {
         size="small"
         label="Line Color"
         sx={{ width: 150 }}
-        defaultValue="#ff0000"
         value={color}
         InputProps={{
           endAdornment: <input
@@ -150,10 +149,18 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
   const [description, setDescription] = useState('');
   const [dataOptions, setDataOptions] = useState([]);
   const [axisOptions, setAxisOptions] = useState([]);
+  const [accumulator, setAccumulator] = useState(accumulators[0]);
 
+  // Line/Bar Chart Details
   const [xAxis, setXAxis] = useState('');
   const [lines, setLines] = useState([]);
-  const [accumulator, setAccumulator] = useState(accumulators[0]);
+
+  // Pie Chart Details
+  const [pieData, setPieData] = useState('');
+  const [showBy, setShowBy] = useState('');
+
+  // Bar Charts
+  const [stackedBars, setStackedBars] = useState(false);
 
   const reportsData = useSelector(({ reports }) => reports.reports);
 
@@ -176,6 +183,39 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
 
   const handleDeleteLine = (lineId) => {
     setLines(lines.filter(({ id }) => id !== lineId));
+  };
+
+  const createPayload = () => {
+    const payload = {
+      name,
+      reportId: chartReport.id,
+      desc: description,
+      type: chartType,
+      accumulator: accumulator.id,
+    };
+    switch (chartType) {
+      case 'line':
+        return {
+          ...payload,
+          xaxis: xAxis,
+          lines,
+        };
+      case 'pie':
+        return {
+          ...payload,
+          dataField: pieData.id,
+          showBy: showBy.id,
+        };
+      case 'bar':
+        return {
+          ...payload,
+          xaxis: xAxis,
+          bars: lines,
+          stacked: stackedBars,
+        };
+      default:
+        return {};
+    }
   };
 
   useEffect(
@@ -227,29 +267,29 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
           />
         )}
         {activeStep === 2 && (
-          <>
-            {chartType === 'line' && (
-              <Stack spacing={2}>
-                <TextField
-                  type="text"
-                  name="chart-name"
-                  size="small"
-                  label="Chart Name"
-                  fullWidth
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                />
-                <TextField
-                  type="text"
-                  name="chart-desc"
-                  size="small"
-                  label="Chart Description"
-                  multiline
-                  rows={2}
-                  fullWidth
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
+          <Stack spacing={2}>
+            <TextField
+              type="text"
+              name="chart-name"
+              size="small"
+              label="Chart Name"
+              fullWidth
+              value={name}
+              onChange={(event) => setName(event.target.value)}
+            />
+            <TextField
+              type="text"
+              name="chart-desc"
+              size="small"
+              label="Chart Description"
+              multiline
+              rows={2}
+              fullWidth
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            {(chartType === 'line' || chartType === 'bar') && (
+              <>
                 <Autocomplete
                   disablePortal
                   id="x-axis"
@@ -266,7 +306,8 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
                 />
                 <div>
                   <InputLabel>
-                    Lines for the Chart
+                    {chartType === 'line' && 'Lines for the Chart'}
+                    {chartType === 'bar' && 'Bars for the Chart'}
                   </InputLabel>
                   {lines.map((lineObj) => (
                     <LineDetail
@@ -275,28 +316,71 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
                       handleDelete={handleDeleteLine}
                     />
                   ))}
-                  <Typography variant="h6" marginY={1}>Add New Line</Typography>
+                  <Typography variant="h6" marginY={1}>
+                    Add New&nbsp;
+                    {chartType === 'line' ? 'Line' : 'Bar'}
+                  </Typography>
                   <LineAdd dataOptions={dataOptions} handleAddLine={handleAddLine} />
                 </div>
+              </>
+            )}
+            {chartType === 'bar' && (
+              <FormControlLabel
+                control={<Checkbox checked={stackedBars} />}
+                label="Stack the bars"
+                onChange={(e) => setStackedBars(e.target.checked)}
+              />
+            )}
+            {chartType === 'pie' && (
+              <>
                 <Autocomplete
                   disablePortal
-                  id="accumulator"
-                  value={accumulator}
-                  options={accumulators}
+                  id="pie-data"
+                  options={dataOptions}
                   fullWidth
+                  value={pieData}
                   renderInput={(params) => (
                     <TextField
                       {...params}
-                      label="Group as"
+                      label="Choose a Data"
                       size="small"
                     />
                   )}
-                  onChange={(_, accuData) => setAccumulator(accuData)}
+                  onChange={(_, dataObj) => setPieData(dataObj)}
                 />
-              </Stack>
+                <Autocomplete
+                  disablePortal
+                  id="pie-legend"
+                  options={axisOptions}
+                  fullWidth
+                  value={showBy}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Choose a Legend"
+                      size="small"
+                    />
+                  )}
+                  onChange={(_, axisObj) => setShowBy(axisObj)}
+                />
+              </>
             )}
-            <Box />
-          </>
+            <Autocomplete
+              disablePortal
+              id="accumulator"
+              value={accumulator}
+              options={accumulators}
+              fullWidth
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Group as"
+                  size="small"
+                />
+              )}
+              onChange={(_, accuData) => setAccumulator(accuData)}
+            />
+          </Stack>
         )}
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
@@ -318,15 +402,7 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
           ? (
             <Button
               onClick={() => handleSubmit(
-                {
-                  name,
-                  reportId: chartReport.id,
-                  desc: description,
-                  type: chartType,
-                  xaxis: xAxis,
-                  lines,
-                  accumulator: accumulator.id,
-                },
+                createPayload(),
                 chartType,
               )}
             >

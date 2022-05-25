@@ -14,6 +14,7 @@ import SalesImg from '../assets/images/sales.svg';
 import OthersImg from '../assets/images/Others.png';
 import LineChartImg from '../assets/images/line-chart.svg';
 import PieChartImg from '../assets/images/pie-chart.svg';
+import BarChartImg from '../assets/images/bar-chart.svg';
 
 export default function CustomCard({
   cardName,
@@ -40,6 +41,8 @@ export default function CustomCard({
         return LineChartImg;
       case 'pie':
         return PieChartImg;
+      case 'bar':
+        return BarChartImg;
       case 'Others':
         return OthersImg;
       default:

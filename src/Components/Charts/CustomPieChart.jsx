@@ -8,15 +8,7 @@ import {
   ResponsiveContainer,
   Sector,
 } from 'recharts';
-
-const getRandomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i += 1) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
+import { cutShortName, getRandomColor } from '../../utils/utils';
 
 const COLORS = [...Array(30)].map(() => getRandomColor());
 
@@ -39,8 +31,14 @@ const renderActiveShape = (props) => {
 
   return (
     <g>
-      <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-        {payload.name}
+      <text x={cx} y={cy} dy={-9} textAnchor="middle" fill="#000">
+        {value}
+      </text>
+      <text x={cx} y={cy} dy={9} textAnchor="middle" fill={fill}>
+        {cutShortName(payload.name)}
+      </text>
+      <text x={cx} y={cy} dy={27} textAnchor="middle" fill="#333">
+        {`${(percent * 100).toFixed(2)}%`}
       </text>
       <Sector
         cx={cx}
@@ -60,8 +58,8 @@ const renderActiveShape = (props) => {
         outerRadius={outerRadius + 10}
         fill={fill}
       />
-      <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
-      <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
+      {/* <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" /> */}
+      {/* <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" /> */}
       {/* <text
         x={ex + (cos >= 0 ? 1 : -1) * 10}
         y={ey}
@@ -71,17 +69,30 @@ const renderActiveShape = (props) => {
         {`${payload.name}`}
 
       </text> */}
-      <text x={ex + (cos >= 0 ? 1 : -1) * 10} y={ey} dy={18} textAnchor={textAnchor} fill="#333">{`${value}`}</text>
-      <text x={ex + (cos >= 0 ? 1 : -1) * 10} y={ey} dy={36} textAnchor={textAnchor} fill="#999">
+      {/* <text
+        x={ex + (cos >= 0 ? 1 : -1) * 10}
+        y={ey}
+        dy={18}
+        textAnchor={textAnchor}
+        fill="#333"
+      >
+        {`${(percent * 100).toFixed(2)}%`}
+
+      </text> */}
+      {/* <text
+        x={ex + (cos >= 0 ? 1 : -1) * 10}
+        y={ey}
+        dy={36}
+        textAnchor={textAnchor}
+        fill="#999"
+      >
         {`(${(percent * 100).toFixed(2)}%)`}
-      </text>
+      </text> */}
     </g>
   );
 };
 
 export default function CustomPieChart({ data, showBy, dataField }) {
-  console.log(data, showBy, dataField);
-
   const pieData = data.map(
     (dataObj) => ({ name: dataObj[showBy], value: dataObj[dataField] }),
   );
@@ -100,8 +111,8 @@ export default function CustomPieChart({ data, showBy, dataField }) {
             data={pieData}
             activeIndex={activeIndex}
             activeShape={renderActiveShape}
-            outerRadius={80}
-            innerRadius={55}
+            outerRadius={100}
+            innerRadius={70}
             dataKey="value"
             onMouseEnter={onPieEnter}
           >
@@ -118,6 +129,16 @@ export default function CustomPieChart({ data, showBy, dataField }) {
             layout="vertical"
             align="right"
             verticalAlign="top"
+            payload={
+              pieData.map(
+                (item, index) => ({
+                  id: item.name,
+                  type: 'square',
+                  value: cutShortName(item.name),
+                  color: COLORS[index],
+                }),
+              )
+            }
           />
         </PieChart>
       </ResponsiveContainer>

@@ -103,7 +103,7 @@ export function loadChart(chartData) {
           response = await getPieChartData(chartData);
           break;
         case 'bar':
-          response = await getBarChartData(payload);
+          response = await getBarChartData(chartData);
           break;
         default:
           break;

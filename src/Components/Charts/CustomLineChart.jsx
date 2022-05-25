@@ -3,8 +3,13 @@ import React, { useState } from 'react';
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
 } from 'recharts';
+import { cutShortName } from '../../utils/utils';
 
 export default function CustomLineChart({ data = [], lines = [], xAxis }) {
+  const modData = data.map((obj) => ({
+    ...obj,
+    [xAxis]: cutShortName(obj[xAxis]),
+  }));
   const opacityState = {};
   lines.forEach((lineObj) => {
     opacityState[lineObj.dataField] = 1;
@@ -38,7 +43,7 @@ export default function CustomLineChart({ data = [], lines = [], xAxis }) {
         <LineChart
           width={500}
           height="100%"
-          data={data}
+          data={modData}
           margin={{
             top: 5,
             right: 10,
@@ -58,6 +63,7 @@ export default function CustomLineChart({ data = [], lines = [], xAxis }) {
               strokeOpacity={state.opacity[lineObj.dataField]}
               stroke={lineObj.color}
               activeDot={{ r: 8 }}
+              key={lineObj.dataField}
             />
           ))}
         </LineChart>

@@ -15,6 +15,7 @@ import CustomCard from '../Components/CustomCard';
 import ChartStepper from '../Components/ChartStepper';
 import LineChart from '../Components/Charts/CustomLineChart';
 import PieChart from '../Components/Charts/CustomPieChart';
+import BarChart from '../Components/Charts/CustomBarChart';
 
 export default function Charts() {
   const dispatch = useDispatch();
@@ -53,11 +54,6 @@ export default function Charts() {
     dispatch(emptyChart());
   };
 
-  useEffect(() => {
-    dispatch(loadReports());
-    dispatch(loadCharts());
-  }, []);
-
   const renderChart = (type) => {
     switch (type) {
       case 'line':
@@ -76,10 +72,24 @@ export default function Charts() {
             dataField={selectedChart.dataField}
           />
         );
+      case 'bar':
+        return (
+          <BarChart
+            data={selectedChart.chartData}
+            bars={selectedChart.bars}
+            xAxis={selectedChart.xaxis}
+            stackedBars={selectedChart.stacked}
+          />
+        );
       default:
         return '';
     }
   };
+
+  useEffect(() => {
+    dispatch(loadReports());
+    dispatch(loadCharts());
+  }, []);
 
   return (
     <>
@@ -121,7 +131,6 @@ export default function Charts() {
         open={chartOpen}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        maxWidth="xl"
       >
         <DialogTitle id="alert-dialog-title">
           <Box display="flex" justifyContent="space-between">
