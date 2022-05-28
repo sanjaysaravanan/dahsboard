@@ -38,36 +38,34 @@ export default function CustomLineChart({ data = [], lines = [], xAxis }) {
   };
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <ResponsiveContainer width="100%" height={300}>
-        <LineChart
-          width={500}
-          height="100%"
-          data={modData}
-          margin={{
-            top: 5,
-            right: 10,
-            left: 0,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey={xAxis} />
-          <YAxis />
-          <Tooltip />
-          <Legend onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
-          {lines.map((lineObj) => (
-            <Line
-              type="monotone"
-              dataKey={lineObj.dataField}
-              strokeOpacity={state.opacity[lineObj.dataField]}
-              stroke={lineObj.color}
-              activeDot={{ r: 8 }}
-              key={lineObj.dataField}
-            />
-          ))}
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart
+        width={500}
+        height={300}
+        data={modData}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey={xAxis} />
+        <YAxis />
+        <Tooltip />
+        <Legend onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
+        {lines.map((lineObj) => (
+          <Line
+            type="monotone"
+            dataKey={lineObj.dataField}
+            strokeOpacity={state.opacity[lineObj.dataField]}
+            stroke={lineObj.color}
+            activeDot={{ r: 8 }}
+            key={lineObj.dataField}
+          />
+        ))}
+      </LineChart>
+    </ResponsiveContainer>
   );
 }

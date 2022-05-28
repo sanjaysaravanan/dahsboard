@@ -12,6 +12,8 @@ import {
 import AddIcon from '@mui/icons-material/Add';
 import { DeleteOutline } from '@mui/icons-material';
 
+import MiniChartCard from './MiniChartCard';
+
 const steps = [
   'Choose a Report',
   'Choose a Chart',
@@ -172,6 +174,10 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  const handleChartSelection = (chartId) => {
+    setChartType(chartId);
+  };
+
   const handleAddLine = (obj) => {
     const lineData = {
       ...obj,
@@ -257,14 +263,18 @@ export default function ChartStepper({ handleSubmit, handleClose }) {
           />
         )}
         {activeStep === 1 && (
-          <Autocomplete
-            disablePortal
-            id="chart-type"
-            options={chartsObjs}
-            fullWidth
-            renderInput={(params) => <TextField {...params} label="Choose a chart" size="small" />}
-            onChange={(_, reportObj) => setChartType(reportObj.id)}
-          />
+          <Stack direction="row" spacing={2}>
+            {chartsObjs.map((chartObj) => (
+              <MiniChartCard
+                name={chartObj.label}
+                handleSelect={handleChartSelection}
+                type={chartObj.id}
+                chartId={chartObj.id}
+                highlight={chartObj.id === chartType}
+                key={chartObj.id}
+              />
+            ))}
+          </Stack>
         )}
         {activeStep === 2 && (
           <Stack spacing={2}>

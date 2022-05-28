@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, ButtonBase, CircularProgress } from '@mui/material';
 
+import { ResponsiveContainer } from 'recharts';
 import {
   loadReports, createChart, loadCharts, loadChart, emptyChart, removeChart,
 } from '../state/actions';
@@ -151,8 +152,13 @@ export default function Charts() {
             {isLoading ? (
               <CircularProgress />
             ) : (
-              <Box width="100%" minheight="300px">
-                {selectedChart && renderChart(selectedChart.type)}
+              <Box width="100%" height="300px">
+                {selectedChart
+                && (
+                  <ResponsiveContainer width="100%" height="100%">
+                    {renderChart(selectedChart.type)}
+                  </ResponsiveContainer>
+                )}
               </Box>
             )}
           </Box>

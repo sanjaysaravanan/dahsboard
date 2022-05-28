@@ -22,4 +22,6 @@ export const postBarChart = (payload) => dashboardInstance.post('/charts/bar', p
 
 export const getBarChartData = (payload) => dashboardInstance.post('/charts/bar/data', payload);
 
+export const getChartData = (chartId) => dashboardInstance.get(`/charts/data/${chartId}`);
+
 export const deleteChart = (chartId) => dashboardInstance.delete(`/charts/${chartId}`);

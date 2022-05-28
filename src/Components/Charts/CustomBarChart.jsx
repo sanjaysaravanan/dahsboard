@@ -13,14 +13,14 @@ export default function CustomBarChart({
   }));
 
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height="100%">
       <BarChart
         width={500}
         height={300}
         data={modData}
         margin={{
           top: 5,
-          right: 30,
+          right: 20,
           left: 20,
           bottom: 5,
         }}

@@ -5,30 +5,18 @@ import {
   Pie,
   Cell,
   Legend,
-  ResponsiveContainer,
   Sector,
+  ResponsiveContainer,
 } from 'recharts';
 import { cutShortName, getRandomColor } from '../../utils/utils';
 
 const COLORS = [...Array(30)].map(() => getRandomColor());
 
-const RADIAN = Math.PI / 180;
-
 const renderActiveShape = (props) => {
   const {
-    cx, cy, midAngle, innerRadius,
+    cx, cy, innerRadius,
     outerRadius, startAngle, endAngle, fill, payload, percent, value,
   } = props;
-  const sin = Math.sin(-RADIAN * midAngle);
-  const cos = Math.cos(-RADIAN * midAngle);
-  const sx = cx + (outerRadius + 10) * cos;
-  const sy = cy + (outerRadius + 10) * sin;
-  const mx = cx + (outerRadius + 30) * cos;
-  const my = cy + (outerRadius + 30) * sin;
-  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-  const ey = my;
-  const textAnchor = cos >= 0 ? 'start' : 'end';
-
   return (
     <g>
       <text x={cx} y={cy} dy={-9} textAnchor="middle" fill="#000">
@@ -104,44 +92,42 @@ export default function CustomPieChart({ data, showBy, dataField }) {
   };
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
-          <Pie
-            data={pieData}
-            activeIndex={activeIndex}
-            activeShape={renderActiveShape}
-            outerRadius={100}
-            innerRadius={70}
-            dataKey="value"
-            onMouseEnter={onPieEnter}
-          >
-            {pieData.map((_entry, index) => (
-              <Cell
-                // eslint-disable-next-line react/no-array-index-key
-                key={`cell-${index}`}
-                strokeWidth={5}
-                fill={COLORS[index]}
-              />
-            ))}
-          </Pie>
-          <Legend
-            layout="vertical"
-            align="right"
-            verticalAlign="top"
-            payload={
-              pieData.map(
-                (item, index) => ({
-                  id: item.name,
-                  type: 'square',
-                  value: cutShortName(item.name),
-                  color: COLORS[index],
-                }),
-              )
-            }
-          />
-        </PieChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width="100%" height="100%">
+      <PieChart width={500} height={300}>
+        <Pie
+          data={pieData}
+          activeIndex={activeIndex}
+          activeShape={renderActiveShape}
+          outerRadius={100}
+          innerRadius={70}
+          dataKey="value"
+          onMouseEnter={onPieEnter}
+        >
+          {pieData.map((_entry, index) => (
+            <Cell
+            // eslint-disable-next-line react/no-array-index-key
+              key={`cell-${index}`}
+              strokeWidth={5}
+              fill={COLORS[index]}
+            />
+          ))}
+        </Pie>
+        <Legend
+          layout="vertical"
+          align="right"
+          verticalAlign="top"
+          payload={
+          pieData.map(
+            (item, index) => ({
+              id: item.name,
+              type: 'square',
+              value: cutShortName(item.name),
+              color: COLORS[index],
+            }),
+          )
+        }
+        />
+      </PieChart>
+    </ResponsiveContainer>
   );
 }
