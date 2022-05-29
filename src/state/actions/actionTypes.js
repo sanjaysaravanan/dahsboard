@@ -29,3 +29,7 @@ export const LOAD_CHARTS = "LOAD_CHARTS";
 export const SET_CHARTS_LOADING = "SET_CHARTS_LOADING";
 export const DELETE_CHART = "DELETE_CHART";
 export const SET_SELECTED_CHART = "SET_SELECTED_CHART";
+
+// Dashboard
+export const LOAD_LAYOUT = "LOAD_LAYOUT";
+

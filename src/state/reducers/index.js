@@ -5,6 +5,7 @@ import chartsReducer from "./chartsReducer";
 import notifyReducer from "./notifyReducers";
 import reportsReducer from "./reportsReducer";
 import userReducer from "./userReducer";
+import dashboardReducer from "./dashboardReducer";
 const reducers = combineReducers({
 	state: (state = {}) => state,
 	auth: authReducer,
@@ -12,6 +13,7 @@ const reducers = combineReducers({
 	user: userReducer,
 	reports: reportsReducer,
 	charts: chartsReducer,
+	dashboard: dashboardReducer,
 });
 const rootReducer = (state, action) => {
 	if (action.type === "LOGOUT_SUCCESS") {

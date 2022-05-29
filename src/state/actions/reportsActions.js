@@ -37,7 +37,7 @@ export function createReport(payload) {
         type: LOAD_REPORTS,
         payload: reports,
       })
-      // dispatch(throwNotificationDisplay(message || "Report Created", "success"));
+      dispatch(throwNotificationDisplay("Report Created", "success"));
     } catch (error) {
       dispatch(
         throwNotificationDisplay("Something went wrong", "error")
@@ -59,6 +59,9 @@ export function removeReport(reportId) {
       });
     } catch (error) {
       console.log(error);
+      dispatch(
+        throwNotificationDisplay( error?.response?.data?.errorMsg || "Something went wrong", "error")
+      );
     } finally {
       dispatch(hideGlobalLoading());
     }

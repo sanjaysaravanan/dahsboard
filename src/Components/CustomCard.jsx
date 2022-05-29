@@ -11,7 +11,7 @@ import BusinessImg from '../assets/images/business-card.svg';
 import EducationImg from '../assets/images/education.svg';
 import ExpenseImg from '../assets/images/expense.svg';
 import SalesImg from '../assets/images/sales.svg';
-import OthersImg from '../assets/images/Others.png';
+import OthersImg from '../assets/images/other.svg';
 import LineChartImg from '../assets/images/line-chart.svg';
 import PieChartImg from '../assets/images/pie-chart.svg';
 import BarChartImg from '../assets/images/bar-chart.svg';

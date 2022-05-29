@@ -19,22 +19,20 @@ import GraphBlock from '../Components/Charts/GraphBlock';
 import MiniChartCard from '../Components/MiniChartCard';
 
 import {
-  loadCharts,
+  loadCharts, saveLayout,
 } from '../state/actions';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 
 export default function Home(props) {
-  const { initialLayout } = props;
-
   const dispatch = useDispatch();
 
   const chartsData = useSelector(({ charts }) => charts.charts);
+  const layoutData = useSelector(({ dashboard }) => dashboard);
 
-  const [chartIds, setChartIds] = useState([]);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(layoutData.items);
   const [edit, setEdit] = useState(false);
-  const [layout, setLayout] = useState(initialLayout);
+  const [layout, setLayout] = useState(layoutData.layout);
   const [newChartOpen, setNewChartOpen] = useState(false);
   const [selectedCards, setSelectedCards] = useState([]);
 
@@ -42,7 +40,7 @@ export default function Home(props) {
     currentBreakpoint: 'lg',
     compactType: 'vertical',
     mounted: false,
-    layouts: { lg: [], md: [], sm: [] },
+    layouts: layoutData.layouts,
   });
 
   const handleCloseNewCharts = () => {
@@ -78,7 +76,6 @@ export default function Home(props) {
       },
     });
     setLayout([...layout, ...newCHarts]);
-    setChartIds([...chartIds, ...selectedCards]);
     setItems([...items, ...newCHarts]);
     setEdit(true);
     handleCloseNewCharts();
@@ -111,7 +108,14 @@ export default function Home(props) {
     } else { setSelectedCards([...selectedCards, chartId]); }
   };
 
-  const handleSave = () => { setEdit(false); };
+  const handleSave = () => {
+    dispatch(saveLayout({
+      items,
+      layout,
+      layouts: state.layouts,
+    }));
+    setEdit(false);
+  };
 
   const generateDOM = () => _.map(items, (l) => (
     <Paper
@@ -253,7 +257,7 @@ Home.defaultProps = {
   className: 'layout',
   rowHeight: 30,
   cols: {
-    lg: 12, md: 10, sm: 9, xs: 4, xxs: 2,
+    lg: 12, md: 12, sm: 9, xs: 4, xxs: 2,
   },
   initialLayout: [],
 };

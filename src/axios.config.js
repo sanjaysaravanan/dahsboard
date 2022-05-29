@@ -7,7 +7,7 @@ const source = CancelToken.source();
 
 const dashboardInstance = axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL,
-  timeout: 10000,
+  timeout: 20000,
   cancelToken: source.token,
 });
 const res = function (response) {
