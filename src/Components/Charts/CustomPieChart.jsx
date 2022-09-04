@@ -10,8 +10,6 @@ import {
 } from 'recharts';
 import { cutShortName, getRandomColor } from '../../utils/utils';
 
-const COLORS = [...Array(30)].map(() => getRandomColor());
-
 const renderActiveShape = (props) => {
   const {
     cx, cy, innerRadius,
@@ -81,6 +79,7 @@ const renderActiveShape = (props) => {
 };
 
 export default function CustomPieChart({ data, showBy, dataField }) {
+  const [COLORS, _setColors] = useState([...Array(30)].map(() => getRandomColor()));
   const pieData = data.map(
     (dataObj) => ({ name: dataObj[showBy], value: dataObj[dataField] }),
   );
@@ -105,7 +104,7 @@ export default function CustomPieChart({ data, showBy, dataField }) {
         >
           {pieData.map((_entry, index) => (
             <Cell
-            // eslint-disable-next-line react/no-array-index-key
+              // eslint-disable-next-line react/no-array-index-key
               key={`cell-${index}`}
               strokeWidth={5}
               fill={COLORS[index]}
@@ -117,15 +116,15 @@ export default function CustomPieChart({ data, showBy, dataField }) {
           align="right"
           verticalAlign="top"
           payload={
-          pieData.map(
-            (item, index) => ({
-              id: item.name,
-              type: 'square',
-              value: cutShortName(item.name),
-              color: COLORS[index],
-            }),
-          )
-        }
+            pieData.map(
+              (item, index) => ({
+                id: item.name,
+                type: 'square',
+                value: cutShortName(item.name),
+                color: COLORS[index],
+              }),
+            )
+          }
         />
       </PieChart>
     </ResponsiveContainer>
