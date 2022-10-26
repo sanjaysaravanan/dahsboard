@@ -204,20 +204,21 @@ export default function Home(props) {
           </Fab>
         </Tooltip>
       </Box>
-      <ResponsiveReactGridLayout
-        {...props}
-        layout={layout}
-        resizeHandle={renderResizeHandle}
-        isDraggable={edit}
-        isResizable={edit}
-        isDroppable={edit}
-        layouts={state.layouts}
-        onBreakpointChange={onBreakpointChange}
-        onLayoutChange={onLayoutChange}
-        style={{ minWidth: '1200px' }}
-      >
-        {generateDOM()}
-      </ResponsiveReactGridLayout>
+      <div style={{ minWidth: '1200px' }}>
+        <ResponsiveReactGridLayout
+          {...props}
+          layout={layout}
+          resizeHandle={renderResizeHandle}
+          isDraggable={edit}
+          isResizable={edit}
+          isDroppable={edit}
+          layouts={state.layouts}
+          onBreakpointChange={onBreakpointChange}
+          onLayoutChange={onLayoutChange}
+        >
+          {generateDOM()}
+        </ResponsiveReactGridLayout>
+      </div>
       <Dialog
         open={newChartOpen}
         aria-labelledby="new-chart-dialog"
