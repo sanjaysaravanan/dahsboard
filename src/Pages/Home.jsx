@@ -19,7 +19,7 @@ import GraphBlock from '../Components/Charts/GraphBlock';
 import MiniChartCard from '../Components/MiniChartCard';
 
 import {
-  loadCharts, saveLayout,
+  loadCharts, saveLayout, loadLayout,
 } from '../state/actions';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
@@ -30,6 +30,7 @@ export default function Home(props) {
   const chartsData = useSelector(({ charts }) => charts.charts);
   const layoutData = useSelector(({ dashboard }) => dashboard);
 
+  const [mounted, setMounted] = useState(false);
   const [items, setItems] = useState(layoutData.items);
   const [edit, setEdit] = useState(false);
   const [layout, setLayout] = useState(layoutData.layout);
@@ -39,7 +40,6 @@ export default function Home(props) {
   const [state, setState] = useState({
     currentBreakpoint: 'lg',
     compactType: 'vertical',
-    mounted: false,
     layouts: layoutData.layouts,
   });
 
@@ -131,12 +131,24 @@ export default function Home(props) {
   ));
 
   useEffect(() => {
+    if (!mounted) {
+      dispatch(loadCharts());
+    }
+    dispatch(loadLayout());
+    setMounted(true);
+    return () => {
+      setMounted(false);
+    };
+  }, []);
+
+  useEffect(() => {
+    setItems(layoutData.items);
+    setLayout(layoutData.layout);
     setState({
       ...state,
-      mounted: true,
+      layouts: layoutData.layouts,
     });
-    dispatch(loadCharts());
-  }, []);
+  }, [layoutData]);
 
   return (
     <Box p={1}>

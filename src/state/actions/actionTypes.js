@@ -32,4 +32,4 @@ export const SET_SELECTED_CHART = "SET_SELECTED_CHART";
 
 // Dashboard
 export const LOAD_LAYOUT = "LOAD_LAYOUT";
-
+export const SAVE_LAYOUT = "SAVE_LAYOUT";

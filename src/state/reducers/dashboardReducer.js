@@ -2,6 +2,14 @@
 import { LOAD_LAYOUT } from "../actions/actionTypes";
 import { localStorage } from '../utils/index';
 
+
+const saveToStorage = (payload) => {
+  const { items, layout, layouts } = payload;
+  localStorage.setLocalState('ITEMS', items);
+  localStorage.setLocalState('LAYOUT', layout);
+  localStorage.setLocalState('LAYOUTS', layouts);
+}
+
 export default function (state = {
   items: localStorage.getLocalState('ITEMS') || [],
   layout: localStorage.getLocalState('LAYOUT') || [],
@@ -9,10 +17,7 @@ export default function (state = {
 }, action) {
   switch (action.type) {
     case LOAD_LAYOUT:
-      const { items, layout, layouts } = action.payload;
-      localStorage.setLocalState('ITEMS', items);
-      localStorage.setLocalState('LAYOUT', layout);
-      localStorage.setLocalState('LAYOUTS', layouts);
+      saveToStorage(action.payload);
       return {
         ...state,
         ...action.payload,
